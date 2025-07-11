@@ -1,0 +1,369 @@
+ 
+ NC0000000 J90      2025177 16:23:13.72 MERCIER  00000290  D XCF,CF
+ MR0000000 J90      2025177 16:23:13.81 MERCIER  00000010  IXC361I  16.23.13  DISPLAY XCF 695
+ LR                                          695 00000010  CFNAME     COUPLING FACILITY                 SITE
+ DR                                          695 00000010  CF2        008561.IBM.02.000000026B88        SITE2
+ DR                                          695 00000010             PARTITION: 23   CPCID: 00
+ DR                                          695 00000010          ALLOCATION NOT PERMITTED
+ DR                                          695 00000010              MAINTENANCE MODE
+ DR                                          695 00000010  CF3        009175.IBM.02.0000000B6D78        SITE1
+ DR                                          695 00000010             PARTITION: 23   CPCID: 00
+ DR                                          695 00000010  CF4        003931.IBM.02.0000000683B8        SITE1
+ DR                                          695 00000010             PARTITION: 14   CPCID: 00
+ DR                                          695 00000010  CF5        009175.IBM.02.00000000B215        SITE2
+ ER                                          695 00000010             PARTITION: 01   CPCID: 00
+ 
+ NC0000000 J90      2025177 16:26:07.49 MERCIER  00000290  D XCF,STR,STRNAME=IGWLOCK00
+ MR0000000 J90      2025177 16:26:07.71 MERCIER  00000090  IXC360I  16.26.07  DISPLAY XCF 649
+ LR                                          649 00000090  STRNAME: IGWLOCK00
+ DR                                          649 00000090   STATUS: ALLOCATED
+ DR                                          649 00000090   EVENT MANAGEMENT: MESSAGE-BASED
+ DR                                          649 00000090   TYPE: LOCK
+ DR                                          649 00000090   POLICY INFORMATION:
+ DR                                          649 00000090    POLICY SIZE    : 3 G
+ DR                                          649 00000090    POLICY INITSIZE: 2 G
+ DR                                          649 00000090    POLICY MINSIZE : 1 G
+ DR                                          649 00000090    POLICY RECPRTY : 1
+ DR                                          649 00000090    FULLTHRESHOLD  : 80
+ DR                                          649 00000090    ALLOWAUTOALT   : YES
+ DR                                          649 00000090    REBUILD PERCENT: 1
+ DR                                          649 00000090    DUPLEX         : ALLOWED
+ DR                                          649 00000090    ALLOWREALLOCATE: YES
+ DR                                          649 00000090    PREFERENCE LIST: CF5      CF3      CF4      CF2
+ DR                                          649 00000090    ENFORCEORDER   : YES
+ DR                                          649 00000090    EXCLUSION LIST IS EMPTY
+ DR                                          649 00000090
+0DR                                          649 00000090   ACTIVE STRUCTURE
+ DR                                          649 00000090   ----------------
+ DR                                          649 00000090    ALLOCATION TIME: 06/04/2025 10:52:21
+ DR                                          649 00000090    CFNAME         : CF5
+ DR                                          649 00000090    COUPLING FACILITY: 009175.IBM.02.00000000B215
+ DR                                          649 00000090                       PARTITION: 01   CPCID: 00
+ DR                                          649 00000090    STORAGE CONFIGURATION     ALLOCATED          MAXIMUM      %
+ DR                                          649 00000090     ACTUAL SIZE:                  1679 M           3072 M   54
+ DR                                          649 00000090
+ DR                                          649 00000090     STR PCTENTRYRSV: 5
+ DR                                          649 00000090
+ DR                                          649 00000090     SPACE USAGE       IN-USE       TOTAL    %
+ DR                                          649 00000090      ENTRIES:
+ DR                                          649 00000090       AVAILABLE:        2900      684924    0
+ DR                                          649 00000090       RESERVED:            0       36048    0
+ DR                                          649 00000090       TOTAL:            2900      720972    0
+ DR                                          649 00000090      LOCKS:                    134217728
+ DR                                          649 00000090
+ DR                                          649 00000090    PHYSICAL VERSION: E0FD06F3 FB26AAE6
+ DR                                          649 00000090    LOGICAL  VERSION: E0FD06F3 FB26AAE6
+ DR                                          649 00000090    SYSTEM-MANAGED PROCESS LEVEL: 8
+ DR                                          649 00000090    XCF GRPNAME    : IXCLO196
+ DR                                          649 00000090    DISPOSITION    : KEEP
+ DR                                          649 00000090    ACCESS TIME    : 0
+ DR                                          649 00000090    NUMBER OF RECORD DATA LISTS PER CONNECTION: 16
+ DR                                          649 00000090    MAX CONNECTIONS: 32
+ DR                                          649 00000090    # CONNECTIONS  : 15
+ DR                                          649 00000090    ENCRYPTION LEVEL: NOT APPLICABLE - NOT SUPPORTED FOR STRUCTURE TYPE
+ DR                                          649 00000090
+ DR                                          649 00000090   SYSTEM RECPRTY  : 1
+ DR                                          649 00000090
+ DR                                          649 00000090   CONNECTION NAME  ID VERSION  SYSNAME  JOBNAME  ASID STATE
+ DR                                          649 00000090   ---------------- -- -------- -------- -------- ---- ----------------
+ DR                                          649 00000090   JA0              0D 000D003E JA0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JB0              02 00020048 JB0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JC0              03 00030036 JC0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JD0              08 00080033 JD0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JE0              0F 000F003E JE0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JF0              09 00090031 JF0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JG0              05 0005003A JG0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JH0              0E 000E003C JH0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JI0              04 00040032 JI0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JJ0              01 0001004B JJ0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   JL0              06 00060035 JL0      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   J80              0C 000C003C J80      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   J90              07 00070037 J90      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   TPN              0B 000B0040 TPN      SMSVSAM  000A ACTIVE
+ DR                                          649 00000090   Z0               0A 000A0033 Z0       SMSVSAM  000A ACTIVE
+ DR                                          649 00000090
+ DR                                          649 00000090   DIAGNOSTIC INFORMATION:  STRNUM: 00000196 STRSEQ: 00000000
+ DR                                          649 00000090                            MANAGER SYSTEM ID:  12006C9D
+ DR                                          649 00000090    NAME/MGR  #QUEUED   1STQESN   LASTQESN  CMPESN    NOTIFYESN
+ DR                                          649 00000090    J90       00000000  00000000  00000000  00000215  00000215
+0DR                                          649 00000090
+ DR                                          649 00000090  EVENT MANAGEMENT: MESSAGE-BASED       MANAGER SYSTEM NAME:  JJ0
+ ER                                          649 00000090                                        MANAGEMENT LEVEL   :  01052010
+ 
+ NC0000000 J90      2025177 16:26:50.30 MERCIER  00000290  SETXCF START,REBUILD,STRNAME=IGWLOCK00,LOC=OTHER
+ 
+ MR0000000 J90      2025177 16:26:50.32 MERCIER  00000010  IXC521I REBUILD FOR STRUCTURE IGWLOCK00 915
+ ER                                          915 00000010  HAS BEEN STARTED
+ 
+ MR0000000 J90      2025177 16:26:50.35 MERCIER  00000010  IXC367I THE SETXCF START REBUILD REQUEST FOR STRUCTURE 916
+ ER                                          916 00000010  IGWLOCK00 WAS ACCEPTED.
+ 
+ M 4040000 J90      2025177 16:26:50.35          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 917
+ D                                           917 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           917 00000090  PROCESSING EVENT:  REBUILD QUIESCE
+ 
+ M 4040000 J90      2025177 16:26:50.38          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 918
+ D                                           918 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           918 00000090  PROCESSING EVENT:  REBUILD CONNECT
+ 
+ M 0040000 J90      2025177 16:26:51.96          00000210  IXL014I IXLCONN REBUILD REQUEST FOR STRUCTURE IGWLOCK00 922
+ D                                           922 00000210  WAS SUCCESSFUL.  JOBNAME: SMSVSAM ASID: 000A
+ D                                           922 00000210  CONNECTOR NAME: J90 CFNAME: CF3
+ D                                           922 00000210  ADDITIONAL STATUS INFORMATION:
+ E                                           922 00000210   REBUILD IS IN PROGRESS
+ 
+ N 4040000 J90      2025177 16:26:51.96          00000090  IGW321I System Ordinal is 1
+ 
+ M 4040000 J90      2025177 16:27:00.08          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 924
+ D                                           924 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           924 00000090  PROCESSING EVENT:  REBUILD CLEANUP
+ 
+ M 0040000 J90      2025177 16:27:00.11          00000290  IXL030I CONNECTOR STATISTICS FOR LOCK STRUCTURE IGWLOCK00, 925
+ D                                           925 00000290  CONNECTOR J90:
+ D                                           925 00000290        00070037 00000000 00000026 00F0000F 000A
+ D                                           925 00000290
+ D                                           925 00000290        00000000 00000000 00000013 00000000
+ D                                           925 00000290        00000008 00000010 00000000 000000ED
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+ D                                           925 00000290
+ D                                           925 00000290        00000001 00000000 00000017 00000000
+ D                                           925 00000290        00000000 00000000 00000000 0000C6E8
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+ D                                           925 00000290
+ D                                           925 00000290        00000002 00000000 0000000A 00000000
+ D                                           925 00000290        00000000 00000000 00000000 000080F2
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+ D                                           925 00000290
+ D                                           925 00000290        00000003 00000000 00000000 00000000
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+ D                                           925 00000290        00000000 00000000 00000000 00000000
+0E                                           925 00000290        00000000 00000000 00000000 00000000
+ 
+ M 0040000 J90      2025177 16:27:00.11          00000290  IXL031I CONNECTOR CLEANUP FOR LOCK STRUCTURE IGWLOCK00, 926
+ D                                           926 00000290  CONNECTOR J90, HAS COMPLETED.
+ D                                           926 00000290  INFO: 00070037 00000000 00000000 00000000 00000000 00000004
+ E                                           926 00000290  00000000 00000000 00000000 00000000
+ 
+ M 4040000 J90      2025177 16:27:00.21          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 927
+ D                                           927 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           927 00000090  PROCESSING EVENT:  REBUILD PROCESS COMPLETE
+ 
+ NC0000000 J90      2025177 16:28:43.47 MERCIER  00000290  D XCF,STR,STRNAME=IGWLOCK00
+ 
+ MR0000000 J90      2025177 16:28:43.68 MERCIER  00000090  IXC360I  16.28.43  DISPLAY XCF 317
+ LR                                          317 00000090  STRNAME: IGWLOCK00
+ DR                                          317 00000090   STATUS: ALLOCATED
+ DR                                          317 00000090   EVENT MANAGEMENT: MESSAGE-BASED
+ DR                                          317 00000090   TYPE: LOCK
+ DR                                          317 00000090   POLICY INFORMATION:
+ DR                                          317 00000090    POLICY SIZE    : 3 G
+ DR                                          317 00000090    POLICY INITSIZE: 2 G
+0DR                                          317 00000090    POLICY MINSIZE : 1 G
+ DR                                          317 00000090    POLICY RECPRTY : 1
+ DR                                          317 00000090    FULLTHRESHOLD  : 80
+ DR                                          317 00000090    ALLOWAUTOALT   : YES
+ DR                                          317 00000090    REBUILD PERCENT: 1
+ DR                                          317 00000090    DUPLEX         : ALLOWED
+ DR                                          317 00000090    ALLOWREALLOCATE: YES
+ DR                                          317 00000090    PREFERENCE LIST: CF5      CF3      CF4      CF2
+ DR                                          317 00000090    ENFORCEORDER   : YES
+ DR                                          317 00000090    EXCLUSION LIST IS EMPTY
+ DR                                          317 00000090
+ DR                                          317 00000090   ACTIVE STRUCTURE
+ DR                                          317 00000090   ----------------
+ DR                                          317 00000090    ALLOCATION TIME: 06/26/2025 16:26:50
+ DR                                          317 00000090    CFNAME         : CF3
+ DR                                          317 00000090    COUPLING FACILITY: 009175.IBM.02.0000000B6D78
+ DR                                          317 00000090                       PARTITION: 23   CPCID: 00
+ DR                                          317 00000090    STORAGE CONFIGURATION     ALLOCATED          MAXIMUM      %
+ DR                                          317 00000090     ACTUAL SIZE:                  1679 M           3072 M   54
+ DR                                          317 00000090
+ DR                                          317 00000090     STR PCTENTRYRSV: 5
+ DR                                          317 00000090
+ DR                                          317 00000090     SPACE USAGE       IN-USE       TOTAL    %
+ DR                                          317 00000090      ENTRIES:
+ DR                                          317 00000090       AVAILABLE:        2907      684924    0
+ DR                                          317 00000090       RESERVED:            0       36048    0
+ DR                                          317 00000090       TOTAL:            2907      720972    0
+ DR                                          317 00000090      LOCKS:                    134217728
+ DR                                          317 00000090
+ DR                                          317 00000090    PHYSICAL VERSION: E118FABF E00C83C2
+ DR                                          317 00000090    LOGICAL  VERSION: E118FABF E00C83C2
+ DR                                          317 00000090    SYSTEM-MANAGED PROCESS LEVEL: 8
+ DR                                          317 00000090    XCF GRPNAME    : IXCLO196
+ DR                                          317 00000090    DISPOSITION    : KEEP
+ DR                                          317 00000090    ACCESS TIME    : 0
+ DR                                          317 00000090    NUMBER OF RECORD DATA LISTS PER CONNECTION: 16
+ DR                                          317 00000090    MAX CONNECTIONS: 32
+ DR                                          317 00000090    # CONNECTIONS  : 15
+ DR                                          317 00000090    ENCRYPTION LEVEL: NOT APPLICABLE - NOT SUPPORTED FOR STRUCTURE TYPE
+ DR                                          317 00000090
+ DR                                          317 00000090   SYSTEM RECPRTY  : 1
+ DR                                          317 00000090
+ DR                                          317 00000090   CONNECTION NAME  ID VERSION  SYSNAME  JOBNAME  ASID STATE
+ DR                                          317 00000090   ---------------- -- -------- -------- -------- ---- ----------------
+ DR                                          317 00000090   JA0              0D 000D003E JA0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JB0              02 00020048 JB0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JC0              03 00030036 JC0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JD0              08 00080033 JD0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JE0              0F 000F003E JE0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JF0              09 00090031 JF0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JG0              05 0005003A JG0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JH0              0E 000E003C JH0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JI0              04 00040032 JI0      SMSVSAM  000A ACTIVE
+0DR                                          317 00000090   JJ0              01 0001004B JJ0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   JL0              06 00060035 JL0      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   J80              0C 000C003C J80      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   J90              07 00070037 J90      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   TPN              0B 000B0040 TPN      SMSVSAM  000A ACTIVE
+ DR                                          317 00000090   Z0               0A 000A0033 Z0       SMSVSAM  000A ACTIVE
+ DR                                          317 00000090
+ DR                                          317 00000090   DIAGNOSTIC INFORMATION:  STRNUM: 00000196 STRSEQ: 00000000
+ DR                                          317 00000090                            MANAGER SYSTEM ID:  12006C9D
+ DR                                          317 00000090    NAME/MGR  #QUEUED   1STQESN   LASTQESN  CMPESN    NOTIFYESN
+ DR                                          317 00000090    J90       00000000  00000000  00000000  0000022B  0000022B
+ DR                                          317 00000090
+ DR                                          317 00000090  EVENT MANAGEMENT: MESSAGE-BASED       MANAGER SYSTEM NAME:  JJ0
+ ER                                          317 00000090                                        MANAGEMENT LEVEL   :  01052010
+ 
+ NC0000000 J90      2025177 16:29:10.48 MERCIER  00000290  SETXCF START,REBUILD,STRNAME=IGWLOCK00,LOC=NORMAL
+ 
+ MR0000000 J90      2025177 16:29:10.50 MERCIER  00000010  IXC521I REBUILD FOR STRUCTURE IGWLOCK00 418
+ ER                                          418 00000010  HAS BEEN STARTED
+ 
+ MR0000000 J90      2025177 16:29:10.53 MERCIER  00000010  IXC367I THE SETXCF START REBUILD REQUEST FOR STRUCTURE 419
+ ER                                          419 00000010  IGWLOCK00 WAS ACCEPTED.
+ 
+ M 4040000 J90      2025177 16:29:10.53          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 420
+ D                                           420 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           420 00000090  PROCESSING EVENT:  REBUILD QUIESCE
+ 
+ M 4040000 J90      2025177 16:29:10.56          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 421
+0D                                           421 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           421 00000090  PROCESSING EVENT:  REBUILD CONNECT
+ 
+ M 0040000 J90      2025177 16:29:12.83          00000210  IXL014I IXLCONN REBUILD REQUEST FOR STRUCTURE IGWLOCK00 433
+ D                                           433 00000210  WAS SUCCESSFUL.  JOBNAME: SMSVSAM ASID: 000A
+ D                                           433 00000210  CONNECTOR NAME: J90 CFNAME: CF5
+ D                                           433 00000210  ADDITIONAL STATUS INFORMATION:
+ E                                           433 00000210   REBUILD IS IN PROGRESS
+ 
+ N 4040000 J90      2025177 16:29:12.83          00000090  IGW321I System Ordinal is 1
+ 
+ M 4040000 J90      2025177 16:29:22.20          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 460
+ D                                           460 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           460 00000090  PROCESSING EVENT:  REBUILD CLEANUP
+ 
+ M 0040000 J90      2025177 16:29:22.21          00000290  IXL030I CONNECTOR STATISTICS FOR LOCK STRUCTURE IGWLOCK00, 461
+ D                                           461 00000290  CONNECTOR J90:
+ D                                           461 00000290        00070037 00000000 00000026 00F0000F 000A
+ D                                           461 00000290
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290
+ D                                           461 00000290        00000001 00000000 00000002 00000000
+ D                                           461 00000290        00000000 00000000 00000000 0000007E
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290
+ D                                           461 00000290        00000002 00000000 00000001 00000000
+ D                                           461 00000290        00000000 00000000 00000000 0000007E
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290
+ D                                           461 00000290        00000003 00000000 00000000 00000000
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ D                                           461 00000290        00000000 00000000 00000000 00000000
+ E                                           461 00000290        00000000 00000000 00000000 00000000
+ 
+ M 0040000 J90      2025177 16:29:22.21          00000290  IXL031I CONNECTOR CLEANUP FOR LOCK STRUCTURE IGWLOCK00, 462
+ D                                           462 00000290  CONNECTOR J90, HAS COMPLETED.
+ D                                           462 00000290  INFO: 00070037 00000000 00000000 00000000 00000000 00000004
+ E                                           462 00000290  00000000 00000000 00000000 00000000
+ 
+ M 4040000 J90      2025177 16:29:22.32          00000090  IGW457I DFSMS REBUILD PROCESSING HAS BEEN 463
+ D                                           463 00000090  INVOKED FOR LOCK  STRUCTURE IGWLOCK00
+ E                                           463 00000090  PROCESSING EVENT:  REBUILD PROCESS COMPLETE
+ 
+ NC0000000 J90      2025177 16:31:11.52 MERCIER  00000290  D XCF,STR,STRNAME=IGWLOCK00
+ 
+ MR0000000 J90      2025177 16:31:11.75 MERCIER  00000090  IXC360I  16.31.11  DISPLAY XCF 954
+ LR                                          954 00000090  STRNAME: IGWLOCK00
+ DR                                          954 00000090   STATUS: ALLOCATED
+0DR                                          954 00000090   EVENT MANAGEMENT: MESSAGE-BASED
+ DR                                          954 00000090   TYPE: LOCK
+ DR                                          954 00000090   POLICY INFORMATION:
+ DR                                          954 00000090    POLICY SIZE    : 3 G
+ DR                                          954 00000090    POLICY INITSIZE: 2 G
+ DR                                          954 00000090    POLICY MINSIZE : 1 G
+ DR                                          954 00000090    POLICY RECPRTY : 1
+ DR                                          954 00000090    FULLTHRESHOLD  : 80
+ DR                                          954 00000090    ALLOWAUTOALT   : YES
+ DR                                          954 00000090    REBUILD PERCENT: 1
+ DR                                          954 00000090    DUPLEX         : ALLOWED
+ DR                                          954 00000090    ALLOWREALLOCATE: YES
+ DR                                          954 00000090    PREFERENCE LIST: CF5      CF3      CF4      CF2
+ DR                                          954 00000090    ENFORCEORDER   : YES
+ DR                                          954 00000090    EXCLUSION LIST IS EMPTY
+ DR                                          954 00000090
+ DR                                          954 00000090   ACTIVE STRUCTURE
+ DR                                          954 00000090   ----------------
+ DR                                          954 00000090    ALLOCATION TIME: 06/26/2025 16:29:10
+ DR                                          954 00000090    CFNAME         : CF5
+ DR                                          954 00000090    COUPLING FACILITY: 009175.IBM.02.00000000B215
+ DR                                          954 00000090                       PARTITION: 01   CPCID: 00
+ DR                                          954 00000090    STORAGE CONFIGURATION     ALLOCATED          MAXIMUM      %
+ DR                                          954 00000090     ACTUAL SIZE:                  1679 M           3072 M   54
+ DR                                          954 00000090
+ DR                                          954 00000090     STR PCTENTRYRSV: 5
+ DR                                          954 00000090
+ DR                                          954 00000090     SPACE USAGE       IN-USE       TOTAL    %
+ DR                                          954 00000090      ENTRIES:
+ DR                                          954 00000090       AVAILABLE:        2801      684924    0
+ DR                                          954 00000090       RESERVED:            0       36048    0
+ DR                                          954 00000090       TOTAL:            2801      720972    0
+ DR                                          954 00000090      LOCKS:                    134217728
+ DR                                          954 00000090
+ DR                                          954 00000090    PHYSICAL VERSION: E118FB45 909A1A84
+ DR                                          954 00000090    LOGICAL  VERSION: E118FB45 909A1A84
+ DR                                          954 00000090    SYSTEM-MANAGED PROCESS LEVEL: 8
+ DR                                          954 00000090    XCF GRPNAME    : IXCLO196
+ DR                                          954 00000090    DISPOSITION    : KEEP
+ DR                                          954 00000090    ACCESS TIME    : 0
+ DR                                          954 00000090    NUMBER OF RECORD DATA LISTS PER CONNECTION: 16
+ DR                                          954 00000090    MAX CONNECTIONS: 32
+ DR                                          954 00000090    # CONNECTIONS  : 15
+ DR                                          954 00000090    ENCRYPTION LEVEL: NOT APPLICABLE - NOT SUPPORTED FOR STRUCTURE TYPE
+ DR                                          954 00000090
+ DR                                          954 00000090   SYSTEM RECPRTY  : 1
+ DR                                          954 00000090
+ DR                                          954 00000090   CONNECTION NAME  ID VERSION  SYSNAME  JOBNAME  ASID STATE
+ DR                                          954 00000090   ---------------- -- -------- -------- -------- ---- ----------------
+ DR                                          954 00000090   JA0              0D 000D003E JA0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JB0              02 00020048 JB0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JC0              03 00030036 JC0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JD0              08 00080033 JD0      SMSVSAM  000A ACTIVE
+0DR                                          954 00000090   JE0              0F 000F003E JE0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JF0              09 00090031 JF0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JG0              05 0005003A JG0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JH0              0E 000E003C JH0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JI0              04 00040032 JI0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JJ0              01 0001004B JJ0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   JL0              06 00060035 JL0      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   J80              0C 000C003C J80      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   J90              07 00070037 J90      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   TPN              0B 000B0040 TPN      SMSVSAM  000A ACTIVE
+ DR                                          954 00000090   Z0               0A 000A0033 Z0       SMSVSAM  000A ACTIVE
+ DR                                          954 00000090
+ DR                                          954 00000090   DIAGNOSTIC INFORMATION:  STRNUM: 00000196 STRSEQ: 00000000
+ DR                                          954 00000090                            MANAGER SYSTEM ID:  12006C9D
+ DR                                          954 00000090    NAME/MGR  #QUEUED   1STQESN   LASTQESN  CMPESN    NOTIFYESN
+ DR                                          954 00000090    J90       00000000  00000000  00000000  00000241  00000241
+ DR                                          954 00000090
+ DR                                          954 00000090  EVENT MANAGEMENT: MESSAGE-BASED       MANAGER SYSTEM NAME:  JJ0
+ ER                                          954 00000090                                        MANAGEMENT LEVEL   :  01052010
