@@ -39,5 +39,76 @@ for cf, data in cf_info.items():
         cf_summary["available"].append(cf)
 
 # Output the result
+print("\n--- CF SUMMARY---\n")
 print("Available CFs:", cf_summary["available"])
 print("Unavailable CFs:", cf_summary["unavailable"])
+
+
+structure_info = {}
+current_structure = None
+
+# First pass: Build structure entries using STRNAME=
+for line in lines:
+    match = re.search(r"STRNAME=([^,\s]+)", line)
+    if match:
+        current_structure = match.group(1)
+        if current_structure not in structure_info:
+            structure_info[current_structure] = {
+                "TYPE": None,
+                "ALLOWAUTOALT": None,
+                "DUPLEX": None,
+                "ALLOWREALLOCATE": None,
+                "PREFERENCE LIST": None,
+                "ENFORCEORDER": None,
+                "lines": []
+            }
+        # If you're currently inside a structure, gather field data
+    if current_structure:
+        structure_info[current_structure]["lines"].append(line)
+
+        # Pull fields from this line if present
+        match_type = re.search(r"TYPE:\s*([^\s]+)", line)
+        if match_type:
+            structure_info[current_structure]["TYPE"] = match_type.group(1)
+
+        # Match ALLOWAUTOALT
+        match_autoalt = re.search(r"ALLOWAUTOALT\s*:\s*([^\s]+)", line)
+        if match_autoalt:
+            structure_info[current_structure]["ALLOWAUTOALT"] = match_autoalt.group(1)
+
+        # Match DUPLEX
+        match_duplex = re.search(r"DUPLEX\s*:\s*([^\s]+)", line)
+        if match_duplex:
+            structure_info[current_structure]["DUPLEX"] = match_duplex.group(1)
+
+        # Match ALLOWREALLOCATE
+        match_realloc = re.search(r"ALLOWREALLOCATE:\s*([^\s]+)", line)
+        if match_realloc:
+            structure_info[current_structure]["ALLOWREALLOCATE"] = match_realloc.group(1)
+
+        # Match PREFERENCE LIST (assume something like "PREFERENCE LIST: CF2, CF3")
+        match_pref = re.search(r"PREFERENCE LIST:\s*(.+)", line)
+        if match_pref:
+            structure_info[current_structure]["PREFERENCE LIST"] = [x.strip() for x in match_pref.group(1).split(",")]
+
+        # Match ENFORCEORDER
+        match_enforce = re.search(r"ENFORCEORDER\s*:\s*([^\s]+)", line)
+        if match_enforce:
+            structure_info[current_structure]["ENFORCEORDER"] = match_enforce.group(1)
+
+
+        # ====== FINAL OUTPUT BLOCK ======
+print("\n--- STRUCTURE INFORMATION ---\n")
+for strname, info in structure_info.items():
+        print(f"STRNAME: {strname}")
+        print(f"  TYPE: {info['TYPE']}")
+        print(f"  ALLOWAUTOALT: {info['ALLOWAUTOALT']}")
+        print(f"  DUPLEX: {info['DUPLEX']}")
+        print(f"  ALLOWREALLOCATE: {info['ALLOWREALLOCATE']}")
+        print(f"  PREFERENCE LIST: {', '.join(info['PREFERENCE LIST']) if info['PREFERENCE LIST'] else 'None'}")
+        print(f"  ENFORCEORDER: {info['ENFORCEORDER']}")
+        print()
+
+print("\n--- ACTIVE STRUCTURE SUMMARY---\n")
+for strname, info in structure_info.items():
+    print(f"STRNAME: {strname}")
