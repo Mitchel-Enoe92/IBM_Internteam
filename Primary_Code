@@ -1,36 +1,45 @@
+"""
+Imports the re module, the re module is Python's built-in library for working
+with regular expressions (Regex). Regex is used for sequences of characters that
+define a search pattern. They are used for powerful string manipulation, including:
+searching, splitting, replacing, validating, etc.
+"""
 import re
+from datetime import datetime, timedelta
+with open("mercier.sdsf.zos32.j4049.text", "r") as file: # Opens the .txtfile in reading mode, otherwise there is no way to extract information from a file if it can not access the information.
+    log_data = file.read() # The variable "log_data" is created storing the entire file.
 
-# Load log data from file
-with open("mercier.sdsf.zos32.j4049.ptech.j90", "r") as file:
-    log_data = file.read()
+lines = log_data.splitlines() # Split the full file content into individual lines (removes newline characters) stored as lines.
 
-# Tokenize log into lines to preserve context
-lines = log_data.splitlines()
-
+# ====== CF SUMMARY ======
+"""
+Dictionary - A data structure that stores that stores key-value pairs.
+"cf_summary" is a dictionary to keep track of available and unavailable Coupling Facilities (CFs) in lists. 
+"""
 cf_summary = {
     "available": [],
     "unavailable": []
 }
 
-cf_info = {}
-current_cf = None
+cf_info = {} # "cf_info" is a dictionary that holds all the detailed information for each of the CFs.
+current_cf = None # "current_cf" is a variable that tracks the current CF being processed while looping through lines.
 
-for line in lines:
-    tokens = line.split()
+for line in lines: # Looping through each line from the file.
+    tokens = line.split() # Then splits the line into individual words/tokens.
 
-    for i, token in enumerate(tokens):
-        # If token looks like "CF2", "CF3", etc.
-        if re.fullmatch(r"CF\d+", token):
+    for i, token in enumerate(tokens): # enumerate() is a function that loops through a list and keep track of the index (position) of each item at the same time.
+                                       # enumerate(tokens) keeps track of the position of the tokens.
+        if re.fullmatch(r"CF\d+", token): # Using Regex, if the token matches a CF name like "CF2", "CF3", etc. Then it tracks the current_cf being processed.
             current_cf = token
-            if current_cf not in cf_info:
+            if current_cf not in cf_info: # If the current_cf has not been seen before it is added into cf_info.
                 cf_info[current_cf] = {
-                    "lines": []
+                    "lines": [] # Initialize with an empty list of lines for this CF.
                 }
-
+        # If a current CF is being tracked, add the current line to its list of associated lines.
         if current_cf:
             cf_info[current_cf]["lines"].append(line)
 
-# Now analyze each CF's lines
+# Analyze each Coupling Facility's collected lines to determine availability.
 for cf, data in cf_info.items():
     all_text = " ".join(data["lines"]).upper()
     if "ALLOCATION NOT PERMITTED" in all_text or "MAINTENANCE MODE" in all_text:
@@ -38,12 +47,7 @@ for cf, data in cf_info.items():
     else:
         cf_summary["available"].append(cf)
 
-# Output the result
-print("\n--- CF SUMMARY---\n")
-print("Available CFs:", cf_summary["available"])
-print("Unavailable CFs:", cf_summary["unavailable"])
-
-
+# ====== STRUCTURE INFORMATION ======
 structure_info = {}
 current_structure = None
 
@@ -52,6 +56,9 @@ for line in lines:
     match = re.search(r"STRNAME=([^,\s]+)", line)
     if match:
         current_structure = match.group(1)
+        if not re.fullmatch(r"[A-Z][A-Z0-9]+", current_structure):
+            current_structure = None
+            continue
         if current_structure not in structure_info:
             structure_info[current_structure] = {
                 "TYPE": None,
@@ -96,8 +103,283 @@ for line in lines:
         if match_enforce:
             structure_info[current_structure]["ENFORCEORDER"] = match_enforce.group(1)
 
+# ====== LPAR ======
+lpar_info = {}
+current_lpar = None
 
-        # ====== FINAL OUTPUT BLOCK ======
+# First pass: Build LPAR entries using SMSVSAM lines
+for line in lines:
+    match = re.search(r"\b([A-Z0-9]{2,4})\b\s+SMSVSAM\s+\S+\s+(ACTIVE|INACTIVE|FAILED)", line)
+    if match:
+        current_lpar = match.group(1)
+        state = match.group(2)
+        if current_lpar not in lpar_info:
+            lpar_info[current_lpar] = {
+                "STATE": state,
+                "lines": []
+            }
+
+    if current_lpar:
+        lpar_info[current_lpar]["lines"].append(line)
+# ====== ACTIVE STRUCTURE ======
+content = "".join(lines)
+allocation_time_pattern = r"ALLOCATION TIME:\s*(\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2})"
+cfname_pattern = r"CFNAME\s*:\s*(CF\d)"
+
+allocation_time_match = re.search(allocation_time_pattern, content)
+cfname_match = re.search(cfname_pattern, content)
+
+cf_validation_summary = {
+    "actual": None,
+    "allocation_time": None,
+    "expected_list": [],
+    "status": None,
+    "reason": None
+}
+
+if allocation_time_match:
+    cf_validation_summary["allocation_time"] = allocation_time_match.group(1)
+if cfname_match:
+    cf_validation_summary["actual"] = cfname_match.group(1)
+
+
+for struct in structure_info.values():
+    prefs_raw = ""
+    for line in struct.get("lines", []):
+        if "PREFERENCE LIST:" in line:
+            pref_match = re.search(r"PREFERENCE LIST:\s*(.*)", line)
+            if pref_match:
+                prefs_raw = pref_match.group(1)
+                break
+    if prefs_raw:
+        prefs_clean = re.findall(r"CF\d+", prefs_raw)
+        cf_validation_summary["expected_list"] = prefs_clean
+        break
+
+actual_cf = cf_validation_summary["actual"]
+expected_cfs = cf_validation_summary["expected_list"]
+
+was_rebuilt = "SETXCF START, REBUILD" in content.upper()
+
+if actual_cf:
+    if actual_cf not in expected_cfs:
+        cf_validation_summary["status"] = "FAIL"
+        cf_validation_summary["reason"] = "not in expected list"
+    else:
+        if actual_cf in cf_summary["unavailable"]:
+            if was_rebuilt:
+                cf_validation_summary["status"] = "FAIL"
+                cf_validation_summary["reason"] = "CF is unavailable (used after rebuild)"
+            else:
+                cf_validation_summary["status"] = "PASS"
+                cf_validation_summary["reason"] = "CF is in maintenance mode but already allocated"
+        else:
+            cf_validation_summary["status"] = "PASS"
+            cf_validation_summary["reason"] = "Valid CF used"
+
+# ====== RUN INFORMATION ======
+"""
+Mainframe Log Parser for SETXCF REBUILD Commands
+
+This module parses mainframe system logs to extract and analyze SETXCF REBUILD 
+command executions. It processes Julian dates, timestamps, and LPAR (Logical 
+Partition) information to provide a structured view of rebuild operations.
+
+Functions:
+- convert_julian_to_date: Converts Julian date format to standard calendar date
+- compute_duration: Calculates time duration between start and end times
+- extract_rebuild_runs: Parses log content to extract rebuild run information
+- print_run_data: Formats and displays the extracted run data
+"""
+
+from datetime import datetime, timedelta
+import re
+
+
+def convert_julian_to_date(julian_str):
+    """
+    Convert Julian date format (YYYYDDD) to standard calendar date (YYYY-MM-DD).
+
+    Julian date format uses the year followed by the day number within that year.
+    For example: 2024001 = January 1, 2024; 2024032 = February 1, 2024
+
+    Args:
+        julian_str (str): Julian date in format YYYYDDD (e.g., "2024001")
+
+    Returns:
+        str: Calendar date in YYYY-MM-DD format
+    """
+    year = int(julian_str[:4])  # Extract the 4-digit year
+    day_of_year = int(julian_str[4:])  # Extract the day number (1-366)
+
+    # Create date by adding days to January 1st of the year
+    date = datetime(year, 1, 1) + timedelta(days=day_of_year - 1)
+    return date.strftime("%Y-%m-%d")
+
+
+def compute_duration(start_time, end_time):
+    """
+    Calculate the duration between two time strings and return in seconds.
+
+    Handles both formats:
+    - HH:MM:SS (e.g., "14:30:15")
+    - HH:MM:SS.ff (e.g., "14:30:15.25") with fractional seconds
+
+    Args:
+        start_time (str): Start time in HH:MM:SS or HH:MM:SS.ff format
+        end_time (str): End time in HH:MM:SS or HH:MM:SS.ff format
+
+    Returns:
+        str: Duration in seconds followed by 's' (e.g., "125s")
+    """
+    # Determine format based on presence of decimal point
+    fmt = "%H:%M:%S.%f" if "." in start_time else "%H:%M:%S"
+
+    # Parse the time strings into datetime objects
+    start_dt = datetime.strptime(start_time, fmt)
+    end_dt = datetime.strptime(end_time, fmt)
+
+    # Calculate the time difference
+    delta = end_dt - start_dt
+    return f"{int(delta.total_seconds())}s"
+
+def extract_rebuild_runs(content):
+    """
+    Parse mainframe log content to extract SETXCF REBUILD command information.
+
+    This function searches for SETXCF START,REBUILD commands and extracts:
+    - Command details and metadata (date, time, originating LPAR)
+    - Processing events (QUIESCE, CONNECT, CLEANUP, PROCESS COMPLETE)
+    - LPAR participation details with timing and status
+
+    Args:
+        content (str): Raw log file content containing SETXCF commands
+
+    Returns:
+        list: List of dictionaries, each containing rebuild run information:
+            - command: The SETXCF command that was executed
+            - julian_date: Date in Julian format (YYYYDDD)
+            - calendar_date: Date in YYYY-MM-DD format
+            - start_time: Time when command was issued
+            - lpar_origin: LPAR that originated the command
+            - events: List of processing events that occurred
+            - lpars: List of LPAR participation details
+    """
+    run_data_list = []
+
+    # Find each SETXCF REBUILD command using regex pattern
+    # Matches commands with STRNAME parameter and LOC=OTHER or LOC=NORMAL
+    rebuild_starts = list(re.finditer(
+        r"(SETXCF\s+START,REBUILD,STRNAME=.*?LOC=(?:OTHER|NORMAL))", content))
+
+    # Process each rebuild command found
+    for i, match in enumerate(rebuild_starts):
+        # Define the block of text for this rebuild run
+        start_pos = match.start()
+        end_pos = rebuild_starts[i + 1].start() if i + 1 < len(rebuild_starts) else len(content)
+        block = content[start_pos:end_pos]
+
+        # Initialize run information with the command
+        run_info = {'command': match.group(1)}
+
+        # Extract metadata: Julian date, time, and originating LPAR
+        # Pattern matches: Julian_date Time ... LPAR_ID
+        meta_match = re.search(r"(\d{7}) (\d{2}:\d{2}:\d{2}(?:\.\d{2})?).*?\b(J\d{2})\b", block)
+        if meta_match:
+            run_info['julian_date'] = meta_match.group(1)
+            run_info['calendar_date'] = convert_julian_to_date(meta_match.group(1))
+            run_info['start_time'] = meta_match.group(2)
+            run_info['lpar_origin'] = meta_match.group(3)
+        else:
+            # Set default values if metadata cannot be extracted
+            run_info['julian_date'] = 'UNKNOWN'
+            run_info['calendar_date'] = 'UNKNOWN'
+            run_info['start_time'] = 'UNKNOWN'
+            run_info['lpar_origin'] = 'UNKNOWN'
+
+        # Extract processing events and remove duplicates
+        # Events occur in a specific order during rebuild process
+        raw_events = re.findall(r"PROCESSING EVENT\s*:?\s*REBUILD (QUIESCE|CONNECT|CLEANUP|PROCESS COMPLETE)", block)
+        # Sort events by their expected sequence order
+        unique_events = sorted(set(raw_events),
+                               key=lambda x: ["QUIESCE", "CONNECT", "CLEANUP", "PROCESS COMPLETE"].index(x))
+        run_info['events'] = unique_events
+
+        # Extract LPAR participation details
+        # Pattern matches: LPAR_ID Start_Julian Start_Time End_Julian End_Time ... Status
+        lpar_pattern = (
+            r"([A-Z0-9]+)\s+"  # LPAR ID
+            r"\d{7}\s+"  # Start Julian date
+            r"[\d:.]+\s+"  # Start time
+            r"\d{7}\s+"  # End Julian date
+            r"[\d:.]+\s+"  # End time
+            r"[A-Z0-9_-]+"  # Status
+        )
+        lpar_matches = re.findall(lpar_pattern, block, flags=re.MULTILINE)
+
+        # Process each LPAR's participation data
+        run_info['lpars'] = [{
+            'lpar': m[0],  # LPAR identifier (e.g., J01, J02)
+            'start_date': m[1],  # Start date in Julian format
+            'calendar_start': convert_julian_to_date(m[1]),  # Start date in calendar format
+            'start_time': m[2],  # Start time
+            'end_date': m[3],  # End date in Julian format
+            'calendar_end': convert_julian_to_date(m[3]),  # End date in calendar format
+            'end_time': m[4],  # End time
+            'duration': compute_duration(m[2], m[4]),  # Calculated duration
+            'status': m[5]  # Final status (e.g., SUCCESSFUL, FAILED)
+        } for m in lpar_matches]
+
+        run_data_list.append(run_info)
+
+    return run_data_list
+
+runs = extract_rebuild_runs(content)
+
+def print_run_data(runs):
+    """
+    Format and display the extracted rebuild run data in a readable format.
+
+    Prints a structured report for each rebuild run including:
+    - Run metadata (command, start time, originating LPAR)
+    - Processing events that occurred
+    - Detailed LPAR participation table with timing and status
+
+    Args:
+        runs (list): List of run dictionaries from extract_rebuild_runs()
+    """
+    for idx, run in enumerate(runs, start=1):
+        # Print run header
+        print(f"\n--- Run Information, Part {idx} ---")
+        print("Manual Rebuild Process")
+        print("---------------------------")
+        print(f"Command : {run.get('command', 'UNKNOWN COMMAND')}")
+
+        # Print run metadata with safe access and fallbacks
+        calendar_date = run.get('calendar_date', 'UNKNOWN DATE')
+        start_time = run.get('start_time', 'UNKNOWN TIME')
+        lpar_id = run.get('lpar_origin', 'UNKNOWN')
+
+        print(f"Started at: {calendar_date} {start_time} on {lpar_id}")
+
+        # Print processing events
+        print("Processing events for all LPARS:")
+        for event in run.get('events', []):
+            print(f"REBUILD {event}")
+
+        # Print LPAR participation table
+        print("\nLPAR STARTED      ENDED        TIME  STATUS")
+        for lpar in run.get('lpars', []):
+            print(f"{lpar.get('lpar', '???')} "
+                  f"{lpar.get('calendar_start', '????-??-??')} {lpar.get('start_time', '??:??:??')} "
+                  f"{lpar.get('calendar_end', '????-??-??')} {lpar.get('end_time', '??:??:??')} "
+                  f"{lpar.get('duration', '??s')} {lpar.get('status', 'UNKNOWN')}")
+        # ====== PRINT FINAL OUTPUT BLOCK ======
+
+print("\n--- CF SUMMARY---\n")
+print("Available CFs:", cf_summary["available"])
+print("Unavailable CFs:", cf_summary["unavailable"])
+
 print("\n--- STRUCTURE INFORMATION ---\n")
 for strname, info in structure_info.items():
         print(f"STRNAME: {strname}")
@@ -107,8 +389,111 @@ for strname, info in structure_info.items():
         print(f"  ALLOWREALLOCATE: {info['ALLOWREALLOCATE']}")
         print(f"  PREFERENCE LIST: {', '.join(info['PREFERENCE LIST']) if info['PREFERENCE LIST'] else 'None'}")
         print(f"  ENFORCEORDER: {info['ENFORCEORDER']}")
+        print(f" ")
         print()
 
 print("\n--- ACTIVE STRUCTURE SUMMARY---\n")
 for strname, info in structure_info.items():
     print(f"STRNAME: {strname}")
+
+print("\n--- ACTIVE STRUCTURE ---\n")
+if cf_validation_summary["allocation_time"]:
+    print(f"ALLOCATION TIME: {cf_validation_summary['allocation_time']}")
+if actual_cf:
+    if cf_validation_summary["status"] == "PASS":
+        status_line = "(PASS)"
+    else:
+        status_line = f"(FAIL: {cf_validation_summary['reason']})"
+    print(f"CFNAME : {actual_cf} {status_line}")
+else:
+    print("Required CFNAME data not found.")
+
+#RUN INFORMATION
+print(print_run_data(runs))
+
+
+print("\n--- CONNECTIONS ---\n")
+active_lpars = [lpar for lpar, info in lpar_info.items() if info["STATE"] == "ACTIVE"]
+inactive_lpars = [lpar for lpar, info in lpar_info.items() if info["STATE"] != "ACTIVE"]
+
+print("Active: " + " ".join(sorted(active_lpars)))
+print("Inactive: " + (" ".join(sorted(inactive_lpars)) if inactive_lpars else "<NONE>"))
+
+total = len(lpar_info)
+print(f"\nTotal LPARs: {total} | ACTIVE: {len(active_lpars)} | OTHERS: {total - len(active_lpars)}")
+
+
+# ====== TXT FINAL OUTPUT BLOCK ======
+with open("summary.txt", "w") as summary:
+
+    # --- CF SUMMARY ---
+    summary.write("\n--- CF SUMMARY ---\n\n")
+    summary.write("Available CFs: " + ", ".join(cf_summary["available"]) + "\n")
+    summary.write("Unavailable CFs: " + ", ".join(cf_summary["unavailable"]) + "\n\n")
+
+    # --- STRUCTURE INFORMATION ---
+    summary.write("\n--- STRUCTURE INFORMATION ---\n\n")
+    for strname, info in structure_info.items():
+        summary.write(f"STRNAME: {strname}\n")
+        summary.write(f"  TYPE: {info['TYPE']}\n")
+        summary.write(f"  ALLOWAUTOALT: {info['ALLOWAUTOALT']}\n")
+        summary.write(f"  DUPLEX: {info['DUPLEX']}\n")
+        summary.write(f"  ALLOWREALLOCATE: {info['ALLOWREALLOCATE']}\n")
+        summary.write(f"  PREFERENCE LIST: {', '.join(info['PREFERENCE LIST']) if info['PREFERENCE LIST'] else 'None'}\n")
+        summary.write(f"  ENFORCEORDER: {info['ENFORCEORDER']}\n\n")
+
+    # --- ACTIVE STRUCTURE SUMMARY ---
+    summary.write("\n--- ACTIVE STRUCTURE SUMMARY ---\n\n")
+    for strname in structure_info.keys():
+        summary.write(f"STRNAME: {strname}\n")
+
+    # --- ACTIVE STRUCTURE ---
+    summary.write("\n--- ACTIVE STRUCTURE ---\n\n")
+    if cf_validation_summary["allocation_time"]:
+        summary.write(f"ALLOCATION TIME: {cf_validation_summary['allocation_time']}\n")
+    if cf_validation_summary["actual"]:
+        if cf_validation_summary["status"] == "PASS":
+            status_line = "(PASS)"
+        else:
+            status_line = f"(FAIL: {cf_validation_summary['reason']})"
+        summary.write(f"CFNAME : {cf_validation_summary['actual']} {status_line}\n")
+    else:
+        summary.write("Required CFNAME data not found.\n")
+
+    # --- RUN INFORMATION ---
+    for idx, run in enumerate(runs, start=1):
+        summary.write(f"\n--- Run Information, Part {idx} ---\n")
+        summary.write("Manual Rebuild Process\n")
+        summary.write("---------------------------\n")
+
+        command = run.get('command', 'UNKNOWN COMMAND')
+        calendar_date = run.get('calendar_date', 'UNKNOWN DATE')
+        start_time = run.get('start_time', 'UNKNOWN TIME')
+        lpar_id = run.get('lpar_origin', 'UNKNOWN')
+
+        summary.write(f"Command         : {command}\n")
+        summary.write(f"Started at      : {calendar_date} {start_time} on {lpar_id}\n")
+
+        if run.get('events'):
+            summary.write("Processing Events:\n")
+            for event in run['events']:
+                summary.write(f"  REBUILD {event}\n")
+        else:
+            summary.write("No processing events found.\n")
+
+        if isinstance(run.get('lpars'), list) and run['lpars']:
+            summary.write("\nLPAR Details:\n")
+            summary.write("LPAR   START DATE     TIME       END DATE       TIME       DURATION  STATUS\n")
+            for lpar in run['lpars']:
+                summary.write(f"{lpar.get('lpar', '???'):5}  "
+                              f"{lpar.get('calendar_start', '????-??-??')}  {lpar.get('start_time', '??:??:??')}  "
+                              f"{lpar.get('calendar_end', '????-??-??')}  {lpar.get('end_time', '??:??:??')}  "
+                              f"{lpar.get('duration', '??s'):>8}  {lpar.get('status', 'UNKNOWN')}\n")
+        else:
+            summary.write("No LPAR data found.\n")
+
+    # --- CONNECTIONS ---
+    summary.write("\n=== CONNECTIONS ===\n\n")
+    summary.write("Active: " + " ".join(sorted(active_lpars)) + "\n")
+    summary.write("Inactive: " + (" ".join(sorted(inactive_lpars)) if inactive_lpars else "<NONE>") + "\n")
+    summary.write(f"\nTotal LPARs: {total} | ACTIVE: {len(active_lpars)} | OTHERS: {total - len(active_lpars)}\n")
